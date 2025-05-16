@@ -6,7 +6,11 @@ const PORT = 3000;
 
 app.use(express.json());
 
-app.listen(PORT, ()=>{
+app.get('/showAllUser', (request, response) => {
+    response.status(200).json(BlogUser);
+})
+
+app.listen(PORT, () => {
     console.log(`server is runing on http://localhost:${PORT}`);
-    
+
 })
