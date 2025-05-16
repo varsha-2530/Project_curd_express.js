@@ -35,20 +35,38 @@ app.post("/addUser", (request, response) => {
 
 });
 
+app.put("/UpdateUser/:id", (request, response) => {
+    const UserId = parseInt(request.params.id); // UUID is string
 
-app.delete('/deleteUser/:uid', (request, response) => {
-    const id = parseInt(request.params.uid);
-    //  console.log(id);
-    const found = BlogUser.some(user => user.id === id);
-    //console.log(found);
+    const found = BlogUser.some(user => user.id === UserId);
+
     if (found) {
-        const deleteMember = BlogUser.filter(BlogUsers => BlogUsers.id !== id);
-        response.status(200).json(deleteMember);
+        const updateUser = request.body;
+
+        BlogUser.forEach(user => {
+            if (user.id === UserId) {
+                if (updateUser.title) user.title = updateUser.title;
+                if (updateUser.author) user.author = updateUser.author;
+                if (updateUser.content) user.content = updateUser.content;
+            }
+        });
+
+        response.status(200).json({
+            message: `User with id ${UserId} updated successfully.`,
+            users: BlogUser
+        });
 
     } else {
-        response.status(400).json({ message: `User not found with id ${id}` })
+        response.status(404).json({ message: "User not found" });
     }
 });
+
+
+app.put("UpdateUser/:id", (request, response) => {
+    const UserId = parseInt(request.params.id);
+    const found = BlogUser.some(BlogUsers => BlogUsers.id === UserId);
+    console.log(found);
+})
 
 app.listen(PORT, () => {
     console.log(`server is runing on http://localhost:${PORT}`);
